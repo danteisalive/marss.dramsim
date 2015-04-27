@@ -197,6 +197,18 @@ bool MemoryController::handle_interconnect_cb(void *arg)
 	// align the request; for now assume a 64 byte transaction 
 	// FIXME: in the future there should be some mechanism to check that the size
 	// 	of a transaction and maybe make sure it matches the LLC line size
+	bool isWrite = memRequest->get_type() == MEMORY_OP_UPDATE;
+	//uint64_t entryCycle = sim_cycle;
+	//int coreId = memRequest->get_coreid();
+	//int threadId = memRequest->get_threadid();
+	trace_mem_logfile << 	memRequest->get_coreid() << " " <<
+				memRequest->get_threadid() << " " <<
+				(isWrite ? "WRITE" : "READ") << " " <<
+				std::hex << physicalAddress <<  " " << 
+				std::dec << sim_cycle << endl;
+	//mem->memTrace(isWrite , physicalAddress , coreId  , threadId , entryCycle );
+	
+	
 	physicalAddress = ALIGN_ADDRESS(physicalAddress, dramsim_transaction_size); 
     
     /* This fixes issue #9: since we assume a write-allocate policy for MARSS,
@@ -206,7 +218,8 @@ bool MemoryController::handle_interconnect_cb(void *arg)
      * MEMORY_OP_UPDATE operation when a dirty line is evicted from the cache. 
      */
 
-    bool isWrite = memRequest->get_type() == MEMORY_OP_UPDATE;
+    
+	
     bool accepted = mem->addTransaction(isWrite,physicalAddress);
     queueEntry->inUse = true;
     // the interconnect should have called mem->WillAcceptTransaction() via can_broadcast() before we got here, so this should always succeed

@@ -17,6 +17,7 @@ typedef struct QEMUTimer QEMUTimer;
 typedef struct QEMUFile QEMUFile;
 typedef struct QEMUBH QEMUBH;
 typedef struct DeviceState DeviceState;
+#define BIT(n) (1 << (n))
 
 /* we put basic includes here to avoid repeating them in device drivers */
 #include <stdlib.h>

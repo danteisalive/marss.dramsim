@@ -556,6 +556,10 @@ static void kill_simulation()
     ptl_rip_trace.close();
 #endif
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+trace_mem_logfile.flush();
+trace_mem_logfile.close();
+//////////////////////////////////////////////////////////////////////////////////////////////
     if (config.execute_after_kill.size() > 0) {
         ptl_logfile << "Executing: " << config.execute_after_kill << endl;
         int ret = system(config.execute_after_kill.buf);
@@ -590,6 +594,10 @@ bool handle_config_change(PTLsimConfig& config) {
 	if(!ptl_rip_trace.is_open())
 		ptl_rip_trace.open("ptl_rip_trace");
 #endif
+///////////////////////////////////////////////////////////////
+	if (!trace_mem_logfile.is_open())
+		trace_mem_logfile.open("trace_mem_logfile");
+//////////////////////////////////////////////
 
     if(config.stats_filename.set() && (config.stats_filename != current_yaml_stats_filename)) {
         config.yaml_stats_filename = config.stats_filename;
